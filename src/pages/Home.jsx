@@ -9,7 +9,6 @@ function Home({
   onAddToFavorite,
   onAddToCart,
   isLoading,
-  cartItems,
 }) {
   const renderItems = () => {
     const filtredItems = items.filter((item) =>
@@ -22,7 +21,6 @@ function Home({
         onPlus={(obj) => onAddToCart(obj)}
         loading={isLoading}
         {...item}
-        added={cartItems.some((obj) => Number(obj.id) === Number(item.id))}
       />
     ));
   };
