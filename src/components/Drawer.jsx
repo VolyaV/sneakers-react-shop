@@ -2,10 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import Info from './Info';
 import AppContext from '../context';
+import { useCart } from '../hooks/useCart';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Drawer = ({ onClose, items = [], onRemove }) => {
+  const { totalPrice } = useCart();
   const { cartItems, setCartItems } = React.useContext(AppContext);
   const [orderId, setOrderId] = React.useState(null);
   const [isOrederComplete, setIsOrderComplete] = React.useState(false);
@@ -63,12 +65,12 @@ const Drawer = ({ onClose, items = [], onRemove }) => {
                 <li>
                   <span>Итого:</span>
                   <div></div>
-                  <b>21 498 руб. </b>
+                  <b>{totalPrice} грн. </b>
                 </li>
                 <li>
                   <span>Налог 5%:</span>
                   <div></div>
-                  <b>1074 руб. </b>
+                  <b>{(totalPrice / 100) * 5} грн. </b>
                 </li>
               </ul>
               <button disabled={isLoading} onClick={onClickOrder} className="greenButton">
@@ -81,7 +83,7 @@ const Drawer = ({ onClose, items = [], onRemove }) => {
             title={isOrederComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
             description={
               isOrederComplete
-                ? `Ваш заказ ${orderId} скоро будет передан курьерской доставке`
+                ? `Ваш заказ №${orderId} скоро будет передан курьерской доставке`
                 : 'Добавьте хотябы одну пару кроссовок'
             }
             image={isOrederComplete ? '/img/complete-order.jpg' : '/img/empty-cart.jpg'}

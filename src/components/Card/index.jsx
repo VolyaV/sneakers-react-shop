@@ -3,12 +3,21 @@ import styles from './Card.module.scss';
 import ContentLoader from 'react-content-loader';
 import AppContext from '../../context';
 
-const Card = ({ id, title, imageUrl, price, onPlus, onFavorite, favorited = false, loading }) => {
+const Card = ({
+  id,
+  title,
+  imageUrl,
+  price,
+  onPlus,
+  onFavorite,
+  favorited = false,
+  loading = false,
+}) => {
   const { isItemAdded } = React.useContext(AppContext);
   const [isFavorite, setIsFavorite] = React.useState(favorited);
-
+  const obj = { title, imageUrl, price, id, parentId: id };
   const onClickPlus = () => {
-    onPlus({ title, imageUrl, price, id });
+    onPlus(obj);
   };
 
   const onClickFavorite = () => {
@@ -35,11 +44,13 @@ const Card = ({ id, title, imageUrl, price, onPlus, onFavorite, favorited = fals
       ) : (
         <>
           <div className={styles.favorite}>
-            <img
-              onClick={onClickFavorite}
-              src={isFavorite ? '/img/liked.svg' : '/img/unliked.svg'}
-              alt="favorite"
-            />
+            {onFavorite && (
+              <img
+                onClick={onClickFavorite}
+                src={isFavorite ? '/img/liked.svg' : '/img/unliked.svg'}
+                alt="favorite"
+              />
+            )}
           </div>
           <img width="100%" height={135} src={imageUrl} alt="Sneakers" />
           <h5>{title}</h5>
@@ -48,12 +59,14 @@ const Card = ({ id, title, imageUrl, price, onPlus, onFavorite, favorited = fals
               <span>Цена:</span>
               <b>{price} руб.</b>
             </div>
-            <img
-              className={styles.plus}
-              onClick={onClickPlus}
-              src={isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
-              alt="Plus"
-            />
+            {onPlus && (
+              <img
+                className={styles.plus}
+                onClick={onClickPlus}
+                src={isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
+                alt="Plus"
+              />
+            )}
           </div>
         </>
       )}
